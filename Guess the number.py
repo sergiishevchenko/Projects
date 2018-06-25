@@ -1,3 +1,7 @@
+'''
+Guess the number game
+'''
+
 import math
 import random
 import simplegui

@@ -1,3 +1,7 @@
+'''
+Memory game
+'''
+
 import simplegui
 import random
 

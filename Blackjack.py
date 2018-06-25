@@ -1,5 +1,5 @@
 '''
-Blackjack
+Blackjack game
 '''
 
 import simplegui
@@ -11,16 +11,14 @@ card_images = simplegui.load_image("http://storage.googleapis.com/codeskulptor-a
 CARD_BACK_SIZE = (72, 96)
 CARD_BACK_CENTER = (36, 48)
 card_back = simplegui.load_image("http://storage.googleapis.com/codeskulptor-assets/card_jfitz_back.png")    
-
+SUITS = ('C', 'S', 'H', 'D')
+RANKS = ('A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K')
+VALUES = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10}
 inPlay = False
 outcome = ""
 score = 0
 playerString = "PLAYER"
 dealerString = "DEALER"
-
-SUITS = ('C', 'S', 'H', 'D')
-RANKS = ('A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K')
-VALUES = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10}
 
 class Card:
     def __init__(self, suit, rank):
@@ -51,11 +49,9 @@ class Card:
 
 class Hand:
     def __init__(self):
-        """ create hand object """
         self.cards = []
 
     def __str__(self):
-        """ return a string representation of a hand """
         handCards = ""
         for card in self.cards:
             handCards = handCards + str(card) + " "
@@ -65,11 +61,9 @@ class Hand:
             return "Hand contains " + handCards.strip() + "."
 
     def add_card(self, card):
-        """ add a card object to a hand """
         self.cards.append(card)
 
     def get_value(self):
-        """ compute the value of the hand """
         currentValue = 0
         isAcePresent = False
         for card in self.cards:
@@ -82,7 +76,6 @@ class Hand:
         return currentValue
    
     def draw(self, canvas, pos):
-        """ draw a hand on the canvas"""
         for card in self.cards:
             pos[0] = pos[0] + CARD_SIZE[0] + 30
             card.draw(canvas, pos)
@@ -90,22 +83,18 @@ class Hand:
             
 class Deck:
     def __init__(self):
-        """ create a Deck object """
         self.cards = []
         for suit in SUITS:
             for rank in RANKS:
                 self.cards.append(Card(suit, rank))
 
     def shuffle(self):
-        """ shuffle the deck"""
         random.shuffle(self.cards)
 
     def deal_card(self):
-        """ deal a card object from the deck"""
         return self.cards.pop()
     
     def __str__(self):
-        """ return a string representing the deck """
         deckCards = ""
         for card in self.cards:
             deckCards = deckCards + str(card) + " "

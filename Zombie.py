@@ -1,5 +1,5 @@
 """
-Zombie Apocalypse
+Zombie Apocalypse game
 """
 
 import random
@@ -17,15 +17,8 @@ ZOMBIE = 7
 
 
 class Apocalypse(poc_grid.Grid):
-    """
-    Apocalypse
-    """
-
     def __init__(self, grid_height, grid_width, obstacle_list = None, 
                  zombie_list = None, human_list = None):
-        """
-        __init__
-        """
         poc_grid.Grid.__init__(self, grid_height, grid_width)
         if obstacle_list != None:
             for cell in obstacle_list:
@@ -40,72 +33,43 @@ class Apocalypse(poc_grid.Grid):
             self._human_list = []
     
     def clear(self):
-        """
-        clear
-        """
         poc_grid.Grid.clear(self)
         self._zombie_list = []
         self._human_list = []
         
     def add_zombie(self, row, col):
-        """
-        add_zombie
-        """
         self._zombie_list.append((row,col))
                 
     def num_zombies(self):
-        """
-        num_zombies
-        """
         return len(self._zombie_list)       
           
     def zombies(self):
-        """
-        zombies
-        """
         for zombies in self._zombie_list:
-        # replace with an actual generator
             yield zombies
 
     def add_human(self, row, col):
-        """
-        add_human
-        """
         self._human_list.append((row,col))
         
     def num_humans(self):
-        """
-        num_humans
-        """
         return len(self._human_list)
     
     def humans(self):
-        """
-        humans
-        """
         for human in self._human_list:
             yield human
         
         
     def compute_distance_field(self, entity_type):
-        """
-        compute_distance_field
-        """
         grid_height = poc_grid.Grid.get_grid_height(self)
         grid_width  = poc_grid.Grid.get_grid_width(self)
-        
         visited = [[EMPTY for dummy_col in range(grid_width)] 
                        for dummy_row in range(grid_height)]
-        
         distance_field = []
         for dummy_row in range(grid_height):
             temp_row = []
             for dummy_col in range(grid_width):
                 temp_row.append(grid_height*grid_width)
             distance_field.append(temp_row)
-        
         boundary = poc_queue.Queue()
-        
         if entity_type == ZOMBIE:
             for items in self._zombie_list:
                 boundary.enqueue(items)
@@ -130,9 +94,6 @@ class Apocalypse(poc_grid.Grid):
         return distance_field
     
     def move_humans(self, zombie_distance_field):
-        """
-        move_humans
-        """
         for dummy_idx, human in enumerate(self._human_list):
             max_dist = zombie_distance_field[human[0]][human[1]]
             for neighbor in poc_grid.Grid.eight_neighbors(self, human[0], human[1]):
@@ -144,9 +105,6 @@ class Apocalypse(poc_grid.Grid):
         
     
     def move_zombies(self, human_distance_field):
-        """
-        move_zombies
-        """
         for dummy_idx, zombies in enumerate(self._zombie_list):
             min_dist = human_distance_field[zombies[0]][zombies[1]]
             for neighbor in poc_grid.Grid.four_neighbors(self, zombies[0], zombies[1]):

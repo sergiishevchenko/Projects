@@ -1,3 +1,7 @@
+'''
+Ping-pong game
+'''
+
 import simplegui
 import random
 

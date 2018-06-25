@@ -1,3 +1,7 @@
+'''
+Stopwatch game
+'''
+
 import simplegui
 
 IsRunning = False

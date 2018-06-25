@@ -11,10 +11,6 @@ STRMAP = {EMPTY: " ",
           PLAYERO: "O"}
 
 class TTTBoard:
-    """
-    Class to represent a Tic-Tac-Toe board
-    """
-
     def __init__(self, dim, reverse = False, board = None):
         self._dim = dim
         self._reverse = reverse
@@ -26,9 +22,6 @@ class TTTBoard:
                            for row in range(dim)]
             
     def __str__(self):
-        """
-        Human readable representation of the board
-        """
         rep = ""
         for row in range(self._dim):
             for col in range(self._dim):
@@ -43,22 +36,12 @@ class TTTBoard:
         return rep
 
     def get_dim(self):
-        """
-        Return the dimension of the board
-        """
         return self._dim
     
     def square(self, row, col):
-        """
-        Return the status (EMPTY, PLAYERX, PLAYERO) of the square at
-        position (row, col)
-        """
         return self._board[row][col]
 
     def get_empty_squares(self):
-        """
-        Return a list of (row, col) tuples for all empty squares
-        """
         empty = []
         for row in range(self._dim):
             for col in range(self._dim):
@@ -67,16 +50,10 @@ class TTTBoard:
         return empty
 
     def move(self, row, col, player):
-        """
-        Place player on the board at position (row, col)
-        """
         if self._board[row][col] == EMPTY:
             self._board[row][col] = player
 
     def check_win(self):
-        """
-        check_win
-        """
         lines = []
         lines.extend(self._board)
         cols = [[self._board[rowidx][colidx] for rowidx in range(self._dim)]
@@ -98,25 +75,16 @@ class TTTBoard:
         return None
             
     def clone(self):
-        """
-        Return a copy of the board
-        """
         return TTTBoard(self._dim, self._reverse, self._board)
 
 
 def switch_player(player):
-    """
-    Convenience function to switch players
-    """
     if player == PLAYERX:
         return PLAYERO
     else:
         return PLAYERX
 
 def play_game(mc_move_function, ntrials, reverse = False):
-    """
-    Function to play a game with two players
-    """
     board = TTTBoard(3, reverse)
     curplayer = PLAYERX
     winner = None
@@ -125,17 +93,17 @@ def play_game(mc_move_function, ntrials, reverse = False):
         board.move(row, col, curplayer)
         winner = board.check_win()
         curplayer = switch_player(curplayer)
-        print board
+        print(board)
         print
         
     if winner == PLAYERX:
-        print "X wins!"
+        print("X wins!")
     elif winner == PLAYERO:
-        print "O wins!"
+        print("O wins!")
     elif winner == DRAW:
-        print "Tie!"
+        print("Tie!")
     else:
-        print "Error: unknown winner"
+        print("Error: unknown winner")
 
 
 
@@ -150,12 +118,7 @@ MCMATCH = 1.0
 MCOTHER = 1.0
     
 def mc_trial(board, player):
-    '''
-    takes a current board and the next player to move
-    
-    '''
     currently_empty_squares = board.get_empty_squares()
-
     while currently_empty_squares:
         square = random.choice(currently_empty_squares)
         board.move(square[0], square[1], player)
@@ -165,11 +128,7 @@ def mc_trial(board, player):
         player = switch_player(player)
 
 def mc_update_scores(scores, board, player):
-    '''
-    a grid of scores (a list of lists)
-    '''
     winner = board.check_win()
-
     for row in range(board.get_dim()):
         for col in range(board.get_dim()):
             player = board.square(row, col)
@@ -187,9 +146,6 @@ def mc_update_scores(scores, board, player):
                 pass
 
 def get_best_move(board, scores):
-    '''
-    function find all of the empty squares with the maximum score 
-    '''
     maximum_score = []
     maximum = float('-inf')
     empty_squares = board.get_empty_squares()
@@ -205,11 +161,7 @@ def get_best_move(board, scores):
     return random.choice(maximum_score)
         
 def mc_move(board, player, trials):
-    '''
-    return a move for the machine player in the form of a (row, column) tuple
-    '''
     initial_scores = [[0 for dummy_col in range(board.get_dim())] for dummy_row in range(board.get_dim())]
-
     for dummy_trial in range(trials):
         cloned = board.clone()
         mc_trial(cloned, player)
